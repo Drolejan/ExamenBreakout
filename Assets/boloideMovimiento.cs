@@ -9,19 +9,30 @@ public class boloideMovimiento : MonoBehaviour
     Rigidbody2D rb;
     public float velX,velY,vidas,puntos;
     public TextMeshProUGUI textovidas,textopuntos;
+    public GameObject GameOver;
+    public GameObject Win;
+    public bool inicio,pegado;
+    public Transform player;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.velocity = new Vector2(velX,velY);
+        //rb.velocity = new Vector2(velX,velY);
     }
 
     void Update()
     {
-        if (rb.velocity == Vector2.zero)
+        if (inicio==true)
         {
             velX = Random.Range(2, 5);
             velY = Random.Range(-3, -6);
             rb.velocity = new Vector2(velX, velY);
+            inicio = false;
+            pegado = false;
+        }
+        if (pegado==true)
+        {
+            transform.position = player.position;
         }
     }
 
@@ -44,6 +55,10 @@ public class boloideMovimiento : MonoBehaviour
             puntos++;
             textopuntos.text = "Puntos: " + puntos;
         }
+        if(puntos > 1) 
+        {
+            Win.SetActive(true);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -52,5 +67,10 @@ public class boloideMovimiento : MonoBehaviour
         rb.velocity = Vector2.zero;
         vidas--;
         textovidas.text = "Vidas: " + vidas;
+        if (vidas < 1)
+        {
+           GameOver.SetActive(true);
+        }
+        
     }
 }
